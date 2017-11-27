@@ -1,0 +1,5 @@
+- name: update ZFS volumes
+  zfs: name={{item.name}} state={{item.state}} mountpoint={{item.mountpoint}} quota={{item.quota|default(omit)}}
+  with_items: "{{ zfs_volumes }}"
+  delegate_to: "{{ hypervisor_host }}"
+  when: zfs_volumes is defined
