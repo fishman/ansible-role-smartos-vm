@@ -1,0 +1,43 @@
+
+- name: Import image
+  imgadm:
+    uuid: "{{ image_uuid }}"
+    state: imported
+  delegate_to: "{{ hypervisor_host }}"
+  when: image_uuid is defined
+
+- name: Stop zone
+  vmadm:
+    alias: "{{ alias }}"
+    state: stopped
+  ignore_errors: yes
+  delegate_to: "{{ hypervisor_host }}"
+  when: stop_zone is defined
+
+- name: Delete zone
+  vmadm:
+    alias: "{{ alias }}"
+    state: deleted
+  ignore_errors: yes
+  delegate_to: "{{ hypervisor_host }}"
+  when: delete_zone is defined
+
+- name: create lx zone
+  vmadm: "{{ vmadm_lx }}"
+  delegate_to: "{{ hypervisor_host }}"
+  when: (kernel_version is defined and docker is not defined and brand != "kvm")
+
+- name: create joyent zone
+  vmadm: "{{ vmadm_default }}"
+  delegate_to: "{{ hypervisor_host }}"
+  when: kernel_version is not defined and brand != "kvm"
+
+- name: create docker zone
+  vmadm: "{{ vmadm_docker }}"
+  delegate_to: "{{ hypervisor_host }}"
+  when: docker is defined and brand != "kvm"
+
+- name: create kvm zone
+  vmadm: "{{ vmadm_kvm }}"
+  delegate_to: "{{ hypervisor_host }}"
+  when: brand == "kvm"

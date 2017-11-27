@@ -1,0 +1,16 @@
+brand: "joyent"
+cpu_cap: 100
+firewall_enabled: no
+delegate_dataset: no
+indestructible_delegated: no
+indestructible_zoneroot: no
+max_physical_memory: 1024
+nat_zone: map net0 10.0.0.0/24
+quota: 10
+filesystems: []
+custom_user_script: ""
+internal_metadata: {}
+resolvers:
+  - 213.133.98.98
+  - 213.133.99.99
+  - 213.133.100.100

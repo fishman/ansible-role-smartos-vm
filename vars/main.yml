@@ -1,0 +1,55 @@
+---
+def_script: /usr/sbin/mdata-get root_authorized_keys > ~root/.ssh/authorized_keys ; /usr/sbin/mdata-get root_authorized_keys > ~admin/.ssh/authorized_keys ;
+
+user_script: "{{ def_script }} {{ custom_user_script }}"
+
+vmadm_def: &vmadm_anchor
+  state: present
+  alias: "{{ alias }}"
+  brand: "{{ brand }}"
+  cpu_cap: "{{ cpu_cap }}"
+  image_uuid: "{{ image_uuid }}"
+  delegate_dataset: "{{ delegate_dataset }}"
+  indestructible_delegated: "{{ indestructible_delegated }}"
+  indestructible_zoneroot: "{{ indestructible_zoneroot }}"
+  firewall_enabled: "{{ firewall_enabled }}"
+  quota: "{{ quota }}"
+  max_physical_memory: "{{ max_physical_memory }}"
+  nics: "{{ nics }}"
+  resolvers: "{{ resolvers }}"
+  filesystems: "{{ filesystems }}"
+  customer_metadata:
+    root_authorized_keys : "{{ root_authorized_keys }}"
+    user-script : "{{ user_script }}"
+  internal_metadata: "{{ internal_metadata }}"
+
+vmadm_default:
+  <<: *vmadm_anchor
+
+vmadm_lx:
+  <<: *vmadm_anchor
+  kernel_version: "{{ kernel_version }}"
+
+vmadm_docker:
+  <<: *vmadm_anchor
+  kernel_version: "{{ kernel_version }}"
+  docker: "{{ docker }}"
+
+vmadm_kvm:
+  state: present
+  alias: "{{ alias }}"
+  brand: "{{ brand }}"
+  cpu_cap: "{{ cpu_cap }}"
+  delegate_dataset: "{{ delegate_dataset }}"
+  indestructible_delegated: "{{ indestructible_delegated }}"
+  indestructible_zoneroot: "{{ indestructible_zoneroot }}"
+  firewall_enabled: "{{ firewall_enabled }}"
+  quota: "{{ quota }}"
+  ram: "{{ max_physical_memory }}"
+  nics: "{{ nics }}"
+  resolvers: "{{ resolvers }}"
+  disks: "{{ filesystems }}"
+  customer_metadata:
+    root_authorized_keys : "{{ root_authorized_keys }}"
+    user-script : "{{ user_script }}"
+  internal_metadata: "{{ internal_metadata }}"
