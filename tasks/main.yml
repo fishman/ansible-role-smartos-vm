@@ -1,5 +1,15 @@
 - include_tasks: zfs.yml
 
+- name: Get uuid for image_name
+  command: sh -c "imgadm avail name={{image_name}} | tail -n 1 | awk '{ print $1 }'"
+  register: image_name_out
+  delegate_to: "{{ hypervisor_host }}"
+  when: image_name is defined
+
+- set_fact:
+    image_uuid: "{{ image_name_out.stdout }}"
+  when: image_name is defined
+
 - name: Import image
   imgadm:
     uuid: "{{ image_uuid }}"
